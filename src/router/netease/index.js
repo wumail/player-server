@@ -5,6 +5,7 @@ const router = express.Router();
 const { login_cellphone,
     song_url,
     playlist_detail,
+    playlist_track_all,
     user_playlist,
     user_detail,
     search,
@@ -14,7 +15,8 @@ const { login_cellphone,
     lyric,
     search_hot_detail,
     search_hot,
-    song_detail
+    song_detail,
+    top_song
 } = require('NeteaseCloudMusicApi')
 
 //18190004277 wsad241241
@@ -82,7 +84,7 @@ router.post('/login', async function (req, res, next) {
                 phone,
                 password
             })
-            // console.log(result.body)
+            // console.log(result.body.token)
             // { msg: '密码错误', code: 502, message: '密码错误' }
             /*
             {
@@ -183,6 +185,7 @@ router.post('/login', async function (req, res, next) {
                 net163_username: data.account.userName,
                 net163_userid: `${data.account.id}`,
                 net163_usercookie: data.cookie,
+                net163_token: data.token
             }
             const ifexist = userController.select(
                 {
@@ -190,7 +193,7 @@ router.post('/login', async function (req, res, next) {
                 }
             )
             ifexist.exec().then((result) => {
-                console.log(result);
+                // console.log(result);
                 if (result) {
                     userController.update(
                         {
@@ -251,9 +254,10 @@ router.post('/user_detail', function (req, res) {
 
 //星星堆漫天
 router.post('/search', function (req, res, next) {
-    let request = req.body;
-    if (request.keywords) {
-        search({ keywords: request.keywords }).then((response) => {
+    console.log(req.body);
+    let { keywords, type, limit, offset } = req.body;
+    if (keywords) {
+        search({ keywords, type: type || 1, limit: limit || 30, offset: offset || 0 }).then((response) => {
             const arr = response.body.result.songs;
             res.send(arr)
         })
@@ -319,9 +323,29 @@ router.post('/playlist_detail', function (req, res, next) {
     }
 })
 
+router.post('/playlist_all', (req, res, next) => {
+    // console.log(req.body);
+    let { id, limit, offset } = req.body
+    if(id){
+        playlist_track_all({
+            id,
+            limit: limit || 50,
+            offset: offset || 0
+        }).then((response)=>{
+            // console.log(response);
+            res.send(response.body)
+        }).catch(err => {
+            res.send(err)
+        })
+    } else {
+        res.status(404).send('请检查是否传入数据无误');
+    }
+})
+
 //316103
 router.post('/song_url', function (req, res, next) {
     let request = req.body;
+    console.log(request);
     /*
     if (request.id) {
         const reqData = {
@@ -446,6 +470,12 @@ router.post('/hot', function (req, res, next) {
 
 router.post('/hot_detail', function (req, res, next) {
     search_hot_detail({}).then((response) => {
+        res.send(response)
+    })
+})
+
+router.post('/top/song', function (req, res, next) {
+    top_song({}).then((response) => {
         res.send(response)
     })
 })

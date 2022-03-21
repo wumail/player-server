@@ -8,7 +8,8 @@ var UserSchema = new Schema({
     net163_username: { type: String },                     //网易云账号
     net163_userid: { type: String },
     net163_usercookie: { type: String },            //cookie
-    qq_usercookie: { type: String },
+    net163_token: { type: String },  //token
+    qqmusic_usercookie: { type: String },
     logindate: { type: Date }                       //最近登录时间
 });
 // net163_userpwd: { type: String },                  //密码

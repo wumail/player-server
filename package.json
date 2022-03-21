@@ -17,7 +17,8 @@
     "module-alias": "^2.2.2",
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.12",
-    "node-dev": "^7.0.0"
+    "node-dev": "^7.0.0",
+    "qq-music-api": "^1.0.3"
   },
   "_moduleAliases": {
     "@": "src",

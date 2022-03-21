@@ -27,6 +27,7 @@ router.post('/login', function (req, res) {
                     }
                 })
             } else {
+                console.log(result);
                 res.json({
                     status: 200,
                     data: {
