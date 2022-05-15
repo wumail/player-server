@@ -1,5 +1,5 @@
 const express = require('express');
-const userController = require('@c/userController.js');
+const userController = require('../../controller/userController');
 const router = express.Router();
 const crypto = require('crypto');
 

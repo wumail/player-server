@@ -1,5 +1,5 @@
 const express = require('express');
-const userController = require('@c/userController.js');
+const userController = require('../../controller/userController');
 const router = express.Router();
 const qqMusic = require('qq-music-api');
 
@@ -7,53 +7,53 @@ const qqMusic = require('qq-music-api');
 // qqMusic.setCookie('xxx=xxx; xxx=xxx;');
 router.post("/setCookie", function (req, res, next) {
     // console.log(req.body);
-  let { cookie, username } = req.body
-  const ifexist = userController.select(
-    {
-        username,
-    }
-  )
-  ifexist.exec().then((result) => {
-    //   console.log(1,result);
-      if (result) {
-          userController.update(
-              {
-                  username
-              },
-              {
-                qqmusic_usercookie:cookie
-              }
-          )
-          res.json({
-              status: 200,
-              body: {
-                  flag: true,
-                  data: {},
-                  message: 'QQ音乐cookie保存成功'
-              }
-          })
-      }
-      qqMusic.setCookie(cookie)
-    //   qqMusic.api('/user/setCookie',{ data: 1})
-  }).catch((err) => {
-      console.log(err);
-  })
+    let { cookie, username } = req.body
+    const ifexist = userController.select(
+        {
+            username,
+        }
+    )
+    ifexist.exec().then((result) => {
+        //   console.log(1,result);
+        if (result) {
+            userController.update(
+                {
+                    username
+                },
+                {
+                    qqmusic_usercookie: cookie
+                }
+            )
+            res.json({
+                status: 200,
+                body: {
+                    flag: true,
+                    data: {},
+                    message: 'QQ音乐cookie保存成功'
+                }
+            })
+        }
+        qqMusic.setCookie(cookie)
+        //   qqMusic.api('/user/setCookie',{ data: 1})
+    }).catch((err) => {
+        console.log(err);
+    })
 })
 
 router.post('/user/refresh', (req, res, next) => {
     qqMusic.api('/user/refresh')
 })
 
-router.post('/search', (req, res, next)=>{
-    let { key, pageNo, pageSize} = req.body
+router.post('/search', (req, res, next) => {
+    let { key, pageNo, pageSize } = req.body
     qqMusic.api('search', { key: key || '周杰伦', pageNo: pageNo || 1, pageSize: pageSize || 20 })
-      .then(res => console.log(res))
-      .catch(err => console.log('接口调用出错'))
+        .then(res => console.log(res))
+        .catch(err => console.log('接口调用出错'))
 })
 
 router.post('/new/songs', (req, res, next) => {
-    qqMusic.api('/new/songs', {type : req.body.type || 0})
-        .then((response) =>{ res.send(response.data.list)})
+    qqMusic.api('/new/songs', { type: req.body.type || 0 })
+        .then((response) => { res.send(response.data.list) })
         .catch(err => console.log('接口调用出错'))//
 })
 // {

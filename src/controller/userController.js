@@ -1,4 +1,4 @@
-const User = require("schema/user.js");
+const User = require('../database/schema/user');
 
 /**
  * 插入

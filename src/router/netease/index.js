@@ -1,6 +1,6 @@
 
 const express = require('express');
-const userController = require('@c/userController.js');
+const userController = require('../../controller/userController');
 const router = express.Router();
 const { login_cellphone,
     song_url,
@@ -326,12 +326,12 @@ router.post('/playlist_detail', function (req, res, next) {
 router.post('/playlist_all', (req, res, next) => {
     // console.log(req.body);
     let { id, limit, offset } = req.body
-    if(id){
+    if (id) {
         playlist_track_all({
             id,
             limit: limit || 50,
             offset: offset || 0
-        }).then((response)=>{
+        }).then((response) => {
             // console.log(response);
             res.send(response.body)
         }).catch(err => {
